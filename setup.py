@@ -15,7 +15,7 @@
 
 import codecs
 import unittest
-from distutils.core import setup, Command
+from setuptools import setup, Command
 
 import yapf
 import yapftests
@@ -67,4 +67,5 @@ with codecs.open('README.rst', 'r', 'utf-8') as fd:
       cmdclass={
           'test': RunTests,
       },
+      entry_points={'console_scripts': ['yapf = yapf.__main__']},
   )
