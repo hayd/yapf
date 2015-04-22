@@ -75,9 +75,8 @@ def Reformat(uwlines, verify=True):
       while state.next_token:
         next_token_lineno = state.next_token.lineno
         prev_token = state.next_token.previous_token
-        prev_token_lineno = (
-            prev_token.lineno if prev_token else next_token_lineno
-        )
+        prev_token_lineno = (prev_token.lineno if prev_token else
+                             next_token_lineno)
         if prev_token.is_continuation:
           newline = False
         else:
@@ -148,8 +147,9 @@ def _EmitLineUnformatted(state):
     previous_lineno = previous_token.lineno
     if previous_token.is_multiline_string:
       previous_lineno += previous_token.value.count('\n')
-    newline = (prev_lineno is not None and
-               state.next_token.lineno > previous_lineno)
+    newline = (
+        prev_lineno is not None and state.next_token.lineno > previous_lineno
+    )
     prev_lineno = state.next_token.lineno
     state.AddTokenToState(newline=newline, dry_run=False)
 
@@ -490,10 +490,9 @@ def _SingleOrMergedLines(uwlines):
         if uwlines[index].lineno != uwline.lineno:
           break
         if uwline.last.value != ':':
-          leaf = pytree.Leaf(
-              type=token.SEMI,
-              value=';',
-              context=('', (uwline.lineno, column)))
+          leaf = pytree.Leaf(type=token.SEMI,
+                             value=';',
+                             context=('', (uwline.lineno, column)))
           uwline.AppendToken(format_token.FormatToken(leaf))
         for tok in uwlines[index].tokens:
           uwline.AppendToken(tok)

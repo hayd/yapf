@@ -5,10 +5,12 @@ python:
   - "3.4"
 
 install:
-  - pip install --quiet coveralls
+  - python setup.py install
 
 script:
   - nosetests --with-coverage --cover-package=yapf
+  - yapf --diff --style=yapf -r yapf yapftests setup.py | test -n -
 
 after_success:
+  - pip install --quiet coveralls
   - coveralls

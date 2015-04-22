@@ -42,7 +42,8 @@ def WriteReformattedCode(filename, reformatted_code, in_place, encoding):
   if not reformatted_code.strip():
     return
   if in_place:
-    with py3compat.open_with_encoding(filename, mode='w',
+    with py3compat.open_with_encoding(filename,
+                                      mode='w',
                                       encoding=encoding) as fd:
       fd.write(reformatted_code)
   else:

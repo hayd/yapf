@@ -85,9 +85,8 @@ class FormatDecisionState(object):
     # Note: 'first_indent' is implicit in the stack. Also, we ignore 'previous',
     # because it shouldn't have a bearing on this comparison. (I.e., it will
     # report equal if 'next_token' does.)
-    return (self.next_token == other.next_token and
-            self.column == other.column and
-            self.paren_level == other.paren_level and
+    return (self.next_token == other.next_token and self.column == other.column
+            and self.paren_level == other.paren_level and
             self.start_of_line_level == other.start_of_line_level and
             self.lowest_level_on_line == other.lowest_level_on_line and
             (self.ignore_stack_for_comparison or
@@ -266,9 +265,8 @@ class FormatDecisionState(object):
 
     # Add a penalty for each increasing newline we add.
     last = self.stack[-1]
-    penalty += (
-        style.Get('SPLIT_PENALTY_FOR_ADDED_LINE_SPLIT') * last.num_line_splits
-    )
+    penalty += (style.Get('SPLIT_PENALTY_FOR_ADDED_LINE_SPLIT') *
+                last.num_line_splits)
     if not must_split and current.value not in {'if', 'for'}:
       # Don't penalize for a must split or for splitting before an
       # if-expression or list comprehension.
@@ -398,4 +396,5 @@ class _ParenState(object):
 
   def __repr__(self):
     return '[indent::%d, last_space::%d, closing_scope_indent::%d]' % (
-        self.indent, self.last_space, self.closing_scope_indent)
+        self.indent, self.last_space, self.closing_scope_indent
+    )

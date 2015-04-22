@@ -356,6 +356,7 @@ def _RecAnnotate(tree, annotate_name, annotate_value):
 
 def _AllowBuilderStyleCalls(node):
   """Allow splitting before '.' if it's a builder style function call."""
+
   def RecGetLeaves(node):
     if isinstance(node, pytree.Leaf):
       return [node]
@@ -369,8 +370,8 @@ def _AllowBuilderStyleCalls(node):
   for child in list_of_children:
     if child.value == '.':
       if prev_child.lineno != child.lineno:
-        pytree_utils.SetNodeAnnotation(
-            child, pytree_utils.Annotation.SPLIT_PENALTY, 0)
+        pytree_utils.SetNodeAnnotation(child,
+                                       pytree_utils.Annotation.SPLIT_PENALTY, 0)
     prev_child = child
 
 

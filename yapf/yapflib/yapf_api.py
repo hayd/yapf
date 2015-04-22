@@ -167,7 +167,8 @@ def ReadFile(filename, logger=None):
       raise
 
   try:
-    with py3compat.open_with_encoding(filename, mode='r',
+    with py3compat.open_with_encoding(filename,
+                                      mode='r',
                                       encoding=encoding) as fd:
       source = fd.read()
     return source, encoding
@@ -203,9 +204,8 @@ def _MarkLinesToFormat(uwlines, lines):
         while index < len(uwlines):
           uwline = uwlines[index]
           uwline.disable = True
-          if (uwline.is_comment and
-              re.search(ENABLE_PATTERN, uwline.first.value.strip(),
-                        re.IGNORECASE)):
+          if (uwline.is_comment and re.search(
+              ENABLE_PATTERN, uwline.first.value.strip(), re.IGNORECASE)):
             break
           index += 1
     elif re.search(DISABLE_PATTERN, uwline.last.value.strip(), re.IGNORECASE):
