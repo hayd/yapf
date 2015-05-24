@@ -43,9 +43,9 @@ def GetDefaultStyleForDir(dirname):
   return style.DEFAULT_STYLE
 
 
-def GetCommandLineFiles(command_line_file_list, recursive):
+def GetCommandLineFiles(command_line_file_list, recursive, exclude):
   """Return the list of files specified on the command line."""
-  return _FindPythonFiles(command_line_file_list, recursive)
+  return _FindPythonFiles(command_line_file_list, recursive, exclude)
 
 
 def WriteReformattedCode(filename, reformatted_code, in_place, encoding):
@@ -61,28 +61,31 @@ def WriteReformattedCode(filename, reformatted_code, in_place, encoding):
     encoding: (unicode) The encoding of the file.
   """
   if in_place:
-    with py3compat.open_with_encoding(filename, mode='w',
+    with py3compat.open_with_encoding(filename,
+                                      mode='w',
                                       encoding=encoding) as fd:
       fd.write(reformatted_code)
   else:
     py3compat.EncodeAndWriteToStdout(reformatted_code, encoding)
 
 
-def _FindPythonFiles(filenames, recursive):
+def _FindPythonFiles(filenames, recursive, exclude):
   """Find all Python files."""
   python_files = []
   for filename in filenames:
-    if os.path.isdir(filename):
+    if os.path.isdir(filename) and filename not in exclude:
       if recursive:
         # TODO(morbo): Look into a version of os.walk that can handle recursion.
         python_files.extend(
             os.path.join(dirpath, f)
             for dirpath, _, filelist in os.walk(filename) for f in filelist
-            if IsPythonFile(os.path.join(dirpath, f)))
+            if IsPythonFile(os.path.join(dirpath, f)) and
+            os.path.join(os.path.join(dirpath, f) not in exclude))
       else:
         python_files.extend(os.path.join(filename, f)
                             for f in os.listdir(filename)
-                            if IsPythonFile(os.path.join(filename, f)))
+                            if IsPythonFile(os.path.join(filename, f)) and not
+                            os.path.join(filename, f) in exclude)
     elif os.path.isfile(filename) and IsPythonFile(filename):
       python_files.append(filename)
 
@@ -107,7 +110,8 @@ def IsPythonFile(filename):
     return False
 
   try:
-    with py3compat.open_with_encoding(filename, mode='r',
+    with py3compat.open_with_encoding(filename,
+                                      mode='r',
                                       encoding=encoding) as fd:
       first_line = fd.readlines()[0]
   except (IOError, IndexError):

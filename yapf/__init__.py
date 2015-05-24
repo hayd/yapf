@@ -69,10 +69,10 @@ def main(argv):
             'default is pep8 unless a %s file located in one of the parent '
             'directories of the source file (or current directory for '
             'stdin)' % style.LOCAL_STYLE))
-  parser.add_argument('--no-local-style',
-                      action='store_true',
-                      help=('Do not search for local style defintion (%s)' %
-                            style.LOCAL_STYLE))
+  parser.add_argument(
+      '--no-local-style',
+      action='store_true',
+      help=('Do not search for local style defintion (%s)' % style.LOCAL_STYLE))
   parser.add_argument('--verify',
                       action='store_true',
                       help='try to verify reformatted code for syntax errors')
@@ -94,7 +94,10 @@ def main(argv):
   lines_recursive_group.add_argument('-r', '--recursive',
                                      action='store_true',
                                      help='run recursively over directories')
-
+  parser.add_argument('--exclude',
+                      metavar="globs",
+                      default='',
+                      help='comma seperated files to exclude')
   parser.add_argument('files', nargs='*')
   args = parser.parse_args(argv[1:])
 
@@ -142,7 +145,9 @@ def main(argv):
         verify=args.verify))
     return 0
 
-  files = file_resources.GetCommandLineFiles(args.files, args.recursive)
+  exclude = args.exclude.split(",")
+  files = file_resources.GetCommandLineFiles(args.files, args.recursive,
+                                             exclude)
   if not files:
     raise errors.YapfError('Input filenames did not match any python files')
   FormatFiles(files, lines,
@@ -179,11 +184,15 @@ def FormatFiles(filenames, lines,
   for filename in filenames:
     logging.info('Reformatting %s', filename)
     if style_config is None and not no_local_style:
-      style_config = file_resources.GetDefaultStyleForDir(os.path.dirname(filename))
+      style_config = file_resources.GetDefaultStyleForDir(
+          os.path.dirname(filename))
     try:
       reformatted_code, encoding = yapf_api.FormatFile(
-          filename, style_config=style_config, lines=lines,
-          print_diff=print_diff, verify=verify)
+          filename,
+          style_config=style_config,
+          lines=lines,
+          print_diff=print_diff,
+          verify=verify)
     except SyntaxError as e:
       e.filename = filename
       raise
