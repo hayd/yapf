@@ -253,7 +253,7 @@ class _SubtypeAssigner(pytree_visitor.PyTreeVisitor):
   def _SetTokenSubtype(self, node, subtype, force=False):
     """Set the token's subtype only if it's not already set."""
     if force or not pytree_utils.GetNodeAnnotation(
-          node, pytree_utils.Annotation.SUBTYPE):
+        node, pytree_utils.Annotation.SUBTYPE):
       pytree_utils.SetNodeAnnotation(node, pytree_utils.Annotation.SUBTYPE,
                                      subtype)
 

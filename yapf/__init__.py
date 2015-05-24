@@ -69,10 +69,10 @@ def main(argv):
             'default is pep8 unless a %s file located in one of the parent '
             'directories of the source file (or current directory for '
             'stdin)' % style.LOCAL_STYLE))
-  parser.add_argument('--no-local-style',
-                      action='store_true',
-                      help=('Do not search for local style defintion (%s)' %
-                            style.LOCAL_STYLE))
+  parser.add_argument(
+      '--no-local-style',
+      action='store_true',
+      help=('Do not search for local style defintion (%s)' % style.LOCAL_STYLE))
   parser.add_argument('--verify',
                       action='store_true',
                       help='try to verify reformatted code for syntax errors')
@@ -180,11 +180,15 @@ def FormatFiles(filenames, lines,
     logging.info('Reformatting %s', filename)
     if style_config is None and not no_local_style:
       style_config = (
-          file_resources.GetDefaultStyleForDir(os.path.dirname(filename)))
+          file_resources.GetDefaultStyleForDir(os.path.dirname(filename))
+      )
     try:
       reformatted_code, encoding = yapf_api.FormatFile(
-          filename, style_config=style_config, lines=lines,
-          print_diff=print_diff, verify=verify)
+          filename,
+          style_config=style_config,
+          lines=lines,
+          print_diff=print_diff,
+          verify=verify)
     except SyntaxError as e:
       e.filename = filename
       raise

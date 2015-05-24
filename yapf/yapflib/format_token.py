@@ -138,7 +138,8 @@ class FormatToken(object):
 
     if self.spaces_required_before != 2:
       self.spaces_required_before = (
-          current_column - (previous_column + len(previous.value)))
+          current_column - (previous_column + len(previous.value))
+      )
 
   def OpensScope(self):
     return self.value in pytree_utils.OPENING_BRACKETS

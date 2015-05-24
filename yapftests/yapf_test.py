@@ -162,7 +162,8 @@ class FormatFileTest(unittest.TestCase):
 
         if h:    i
         """)
-    formatted_code = yapf_api.FormatFile(file1, style_config='pep8',
+    formatted_code = yapf_api.FormatFile(file1,
+                                         style_config='pep8',
                                          lines=[(1, 2)])[0]
     self.assertCodeEqual(expected_formatted_code_lines1and2, formatted_code)
 
@@ -173,7 +174,8 @@ class FormatFileTest(unittest.TestCase):
 
         if h:    i
         """)
-    formatted_code = yapf_api.FormatFile(file1, style_config='pep8',
+    formatted_code = yapf_api.FormatFile(file1,
+                                         style_config='pep8',
                                          lines=[(3, 3)])[0]
     self.assertCodeEqual(expected_formatted_code_lines3, formatted_code)
 
@@ -577,9 +579,9 @@ class CommandLineTest(unittest.TestCase):
 
         #   trailing whitespace
         """)
-    self.assertYapfReformats(unformatted_code, expected_formatted_code,
-                             extra_options=['--lines', '3-3',
-                                            '--lines', '13-13'])
+    self.assertYapfReformats(
+        unformatted_code, expected_formatted_code,
+        extra_options=['--lines', '3-3', '--lines', '13-13'])
 
     unformatted_code = textwrap.dedent(u"""\
         '''
